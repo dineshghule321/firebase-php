@@ -1,3 +1,7 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=6e569def80067b8098353f7391c0c478f024666d7227ce7b89b2a7112805d2bd
+
 language: php
 
 php:
@@ -8,12 +12,16 @@ sudo: false
 
 install: travis_retry composer install
 
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
-  - vendor/bin/phpunit --coverage-clover build/coverage.clover
+  - vendor/bin/phpunit --coverage-clover clover.xml
 
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
 
 notifications:
   email:
