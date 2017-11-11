@@ -11,6 +11,8 @@ engines:
         enabled: true
     phpmd:
         enabled: true
+    sonar-php:
+        enabled: true
 ratings:
     paths:
         - "**.php"
