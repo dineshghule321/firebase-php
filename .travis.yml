@@ -18,10 +18,10 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - vendor/bin/phpunit --coverage-clover clover.xml
+  - vendor/bin/phpunit --coverage-clover "clover.${TRAVIS_BUILD_ID}.xml"
 
 after_script:
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build -o "clover.${TRAVIS_BUILD_ID}.xml" --exit-code $TRAVIS_TEST_RESULT || true ; fi
 
 notifications:
   email:
